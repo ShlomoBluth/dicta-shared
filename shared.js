@@ -1,3 +1,20 @@
+
+Cypress.Commands.add('screenSize',({size})=>{
+  if (Cypress._.isArray(size)) {
+    Cypress.config({
+        viewportWidth: size[0],
+        viewportHeight: size[1]
+    })
+    cy.viewport(size[0], size[1])
+  } else {
+    Cypress.config({
+        viewportWidth: 375,
+        viewportHeight: 812
+    })
+    cy.viewport(size)
+  }
+})
+
 Cypress.Commands.add('visitpage',({url})=>{
     function visitpage(status,Attempts){
       if(status!=200){
