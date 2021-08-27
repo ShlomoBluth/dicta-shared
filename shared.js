@@ -21,10 +21,11 @@ Cypress.Commands.add('visitpage',({url})=>{
         cy.wrap(Attempts).should('be.lt', 10)
         cy.intercept(url).as('webreq'+Attempts)
         cy.visit(url,{
-            headers: {
-                Connection: "Keep-Alive"
-                }
+          failOnStatusCode: false,
+          headers: {
+            Connection: "Keep-Alive"
             }
+          }
         )
         cy.get('@webreq'+Attempts).then(req=>{
           visitpage(req.response.statusCode,Attempts+1)
