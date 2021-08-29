@@ -36,19 +36,20 @@ Cypress.Commands.add('visitpage',({url})=>{
   })
 
   Cypress.Commands.add('setLanguageMode',({language,mobileSelector='a'})=>{
+    let languageMode
+    let classAttr
     cy.get('body').then(elem => {
-      let languageMode
       if(language=='Hebrew'){
         languageMode='he'
       }else if(language=='English'){
         languageMode=''
-      }
-      let classAttr 
+      } 
       if(elem.attr("class").substring(0,2)=='he'){
         classAttr=elem.attr("class").substring(0,2)
       }else{
         classAttr=''
       }
+    }).then(()=>{
       if(Cypress.config("viewportWidth")!=1000&&mobileSelector=='lang-switch'){
         cy.clickLanguage('div[class*="lang-switch"]',classAttr,languageMode,language)
       }else {
