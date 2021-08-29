@@ -27,10 +27,8 @@ Cypress.Commands.add('visitpage',({url})=>{
             }
           }
         )
-        cy.get('@webreq'+Attempts).then(req=>{
-          //if(req.response!=undefined){
-            visitpage(req.response.statusCode,Attempts+1)
-          //}
+        cy.wait('@webreq'+Attempts).then(req=>{
+          visitpage(req.response.statusCode,Attempts+1)
         })
       }
     }
