@@ -44,8 +44,9 @@ Cypress.Commands.add('visitpage',({url})=>{
       }else if(language=='English'){
         languageMode=''
       } 
-      if(elem.attr("class").substring(0,2)=='he'){
-        classAttr=elem.attr("class").substring(0,2)
+      if(elem.attr("class").substring(0,2)=='he'|| 
+      elem.attr("class").substring(elem.attr("class").length-2)=='he'){
+        classAttr='he'
       }else{
         classAttr=''
       }
