@@ -28,7 +28,7 @@ Cypress.Commands.add('visitpage',{ retries: 3 },({url})=>{
             }
           }
         )
-        cy.get('@webreq'+Attempts).then(req=>{
+        cy.wait('@webreq'+Attempts).then(req=>{
           visitpage(req.response.statusCode,Attempts+1)
         })
       }
@@ -37,19 +37,21 @@ Cypress.Commands.add('visitpage',{ retries: 3 },({url})=>{
   })
 
   Cypress.Commands.add('setLanguageMode',({language,mobileSelector='a'})=>{
+    let languageMode
+    let classAttr
     cy.get('body').then(elem => {
-      let languageMode
       if(language=='Hebrew'){
         languageMode='he'
       }else if(language=='English'){
         languageMode=''
-      }
-      let classAttr 
-      if(elem.attr("class").substring(0,2)=='he'){
-        classAttr=elem.attr("class").substring(0,2)
+      } 
+      if(elem.attr("class").substring(0,2)=='he'|| 
+      elem.attr("class").substring(elem.attr("class").length-2)=='he'){
+        classAttr='he'
       }else{
         classAttr=''
       }
+    }).then(()=>{
       if(Cypress.config("viewportWidth")!=1000&&mobileSelector=='lang-switch'){
         cy.clickLanguage('div[class*="lang-switch"]',classAttr,languageMode,language)
       }else {
