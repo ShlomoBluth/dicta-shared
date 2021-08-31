@@ -22,7 +22,7 @@ Cypress.Commands.add('visitpage',{ retries: 3 },({url})=>{
         cy.intercept(url).as('webreq'+Attempts)
         cy.visit(url,{
           failOnStatusCode: false,
-          timeout: 60000,
+          timeout: 600000,
           headers: {
             Connection: "Keep-Alive"
             }
