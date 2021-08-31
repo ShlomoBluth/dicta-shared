@@ -15,13 +15,14 @@ Cypress.Commands.add('screenSize',({size})=>{
   }
 })
 
-Cypress.Commands.add('visitpage',({url})=>{
+Cypress.Commands.add('visitpage',{ retries: 3 },({url})=>{
     function visitpage(status,Attempts){
       if(status!=200){
         cy.wrap(Attempts).should('be.lt', 10)
         cy.intercept(url).as('webreq'+Attempts)
         cy.visit(url,{
           failOnStatusCode: false,
+          timeout: 60000,
           headers: {
             Connection: "Keep-Alive"
             }
