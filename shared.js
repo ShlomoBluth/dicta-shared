@@ -15,25 +15,33 @@ Cypress.Commands.add('screenSize',({size})=>{
   }
 })
 
-Cypress.Commands.add('visitpage',{ retries: 3 },({url})=>{
-    function visitpage(status,Attempts){
-      if(status!=200){
-        cy.wrap(Attempts).should('be.lt', 10)
-        cy.intercept(url).as('webreq'+Attempts)
-        cy.visit(url,{
-          failOnStatusCode: false,
-          timeout: 600000,
-          headers: {
-            Connection: "Keep-Alive"
-            }
-          }
-        )
-        cy.wait('@webreq'+Attempts).then(req=>{
-          visitpage(req.response.statusCode,Attempts+1)
-        })
+Cypress.Commands.add('visitpage',({url})=>{
+  cy.visit(url,{
+    retryOnStatusCodeFailure: true,
+    timeout: 600000,
+    headers: {
+      Connection: "Keep-Alive"
       }
     }
-    visitpage(0,0)
+  )
+    // function visitpage(status,Attempts){
+    //   if(status!=200){
+    //     cy.wrap(Attempts).should('be.lt', 10)
+    //     cy.intercept(url).as('webreq'+Attempts)
+    //     cy.visit(url,{
+    //       failOnStatusCode: false,
+    //       timeout: 600000,
+    //       headers: {
+    //         Connection: "Keep-Alive"
+    //         }
+    //       }
+    //     )
+    //     cy.wait('@webreq'+Attempts).then(req=>{
+    //       visitpage(req.response.statusCode,Attempts+1)
+    //     })
+    //   }
+    // }
+    // visitpage(0,0)
   })
 
   Cypress.Commands.add('setLanguageMode',({language,mobileSelector='a'})=>{
