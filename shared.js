@@ -16,33 +16,34 @@ Cypress.Commands.add('screenSize',({size})=>{
 })
 
 Cypress.Commands.add('visitpage',({url})=>{
-  cy.visit(url,{
-    retryOnStatusCodeFailure: true,
-    timeout: 600000,
-    headers: {
-      Connection: "Keep-Alive"
+  // cy.visit(url,{
+  //   retryOnStatusCodeFailure: true,
+  //   timeout: 600000,
+  //   headers: {
+  //     Connection: "Keep-Alive"
+  //     }
+  //   }
+  // )
+  function visitpage(Attempts){
+    cy.wrap(Attempts).should('be.lt', 4)
+    cy.intercept(url).as('webreq'+Attempts)
+    cy.visit(url,{
+      retryOnStatusCodeFailure: true,
+      timeout: 600000,
+      headers: {
+        Connection: "Keep-Alive"
       }
-    }
-  )
-    // function visitpage(status,Attempts){
-    //   if(status!=200){
-    //     cy.wrap(Attempts).should('be.lt', 10)
-    //     cy.intercept(url).as('webreq'+Attempts)
-    //     cy.visit(url,{
-    //       failOnStatusCode: false,
-    //       timeout: 600000,
-    //       headers: {
-    //         Connection: "Keep-Alive"
-    //         }
-    //       }
-    //     )
-    //     cy.wait('@webreq'+Attempts).then(req=>{
-    //       visitpage(req.response.statusCode,Attempts+1)
-    //     })
-    //   }
-    // }
-    // visitpage(0,0)
-  })
+    })
+    cy.wait('@webreq'+Attempts).then(()=>{
+      cy.get('body').then($body=>{
+        if($body.find('div').length<=1){
+          visitpage(Attempts+1)
+        }
+      })
+    })
+  }
+  visitpage(0)
+})
 
   Cypress.Commands.add('setLanguageMode',({language,mobileSelector='a'})=>{
     let languageMode
