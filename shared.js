@@ -36,7 +36,7 @@ Cypress.Commands.add('visitpage',({url})=>{
     })
     cy.wait('@webreq'+Attempts).then(()=>{
       cy.get('body').then($body=>{
-        if($body.find('div').length<=1){
+        if($body.find('#home').length==0){
           visitpage(Attempts+1)
         }
       })
