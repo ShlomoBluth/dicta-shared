@@ -34,6 +34,15 @@ Cypress.Commands.add('visitpage',({url})=>{
         Connection: "Keep-Alive"
       }
     })
+    // cy.document().then(function (doc) {
+    // doc.addEventListener('mouseover', () => {
+    //   setTimeout(function () {
+    //     doc.location.replace("https://synoptic.dicta.org.il/")
+    //   }, 15000)
+    // })
+    // cy.get(elem).contains(text).click()
+    //cy.get(elem).contains(text).click({force:true})
+  //})
     cy.wait('@webreq'+Attempts).then(()=>{
       cy.get('body').then($body=>{
         if($body.find('#home').length==0 && $body.find('[class*="main-content"]').length==0){
