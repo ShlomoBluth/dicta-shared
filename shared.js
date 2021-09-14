@@ -45,7 +45,9 @@ Cypress.Commands.add('visitpage',({url})=>{
   //})
     cy.wait('@webreq'+Attempts).then(()=>{
       cy.get('body').then($body=>{
-        if($body.find('#home').length==0 && $body.find('[class*="main-content"]').length==0){
+        if($body.find('#home').length==0 && $body.find('[class*="main-content"]').length==0
+        &&$body.find('[class="search"]').length==0 && $body.find('[class*="site-wrap"]').length==0 
+        &&$body.find('[class="container h-100"]').length==0&&$body.find('[id*="body"]').length==0){
           visitpage(Attempts+1)
         }
       })
