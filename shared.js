@@ -72,11 +72,21 @@ Cypress.Commands.add('visitpage',({url})=>{
         classAttr=''
       }
     }).then(()=>{
-      if(Cypress.config("viewportWidth")!=1000&&mobileSelector=='lang-switch'){
-        cy.clickLanguage('div[class*="lang-switch"]',classAttr,languageMode,language)
-      }else {
-        cy.clickLanguage('a',classAttr,languageMode,language)
-      }
+      cy.url().then(url=>{
+        if(Cypress.config("viewportWidth")!=1000&&mobileSelector!='a'){
+          if(url.includes('https://merge--cranky-banach-377068.netlify.app/') || 
+          url.includes('https://search.dicta.org.il')){
+            cy.get('#mobile-toolbar-button > .fas').click({force:true})
+            cy.clickLanguage('a[class="text-body title"]',classAttr,languageMode,language)
+            cy.get('.col-3 > span > .fas').click({force:true})
+          }
+          else{
+            cy.clickLanguage('div[class*="lang-switch"]',classAttr,languageMode,language)
+          }
+        }else {
+          cy.clickLanguage('a',classAttr,languageMode,language)
+        }
+      })
     })
   })
   
