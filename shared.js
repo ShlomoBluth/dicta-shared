@@ -74,7 +74,7 @@ Cypress.Commands.add('visitpage',({url})=>{
     }).then(()=>{
       cy.url().then(url=>{
         if(Cypress.config("viewportWidth")!=1000&&mobileSelector!='a'){
-          if(url.includes('https://merge--cranky-banach-377068.netlify.app/') || 
+          if(url.includes('https://dev--cranky-banach-377068.netlify.app/') || 
           url.includes('https://search.dicta.org.il')){
             cy.get('#mobile-toolbar-button > .fas').click({force:true})
             cy.clickLanguage('a[class="text-body title"]',classAttr,languageMode,language)
