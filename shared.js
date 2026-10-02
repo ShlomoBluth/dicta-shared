@@ -16,33 +16,25 @@ Cypress.Commands.add('screenSize',({size})=>{
 })
 
 
-Cypress.Commands.add('visitpage',({url})=>{
-  // cy.visit(url,{
-  //   retryOnStatusCodeFailure: true,
-  //   timeout: 600000,
-  //   headers: {
-  //     Connection: "Keep-Alive"
-  //     }
-  //   }
-  // )
-  function visitpage(Attempts){
-    cy.wrap(Attempts).should('be.lt', 4)
-    cy.intercept('/').as('webreq'+Attempts)
+Cypress.Commands.add('visitpage',({url,maxAttempts=4})=>{
+  // any of these means the tool's page rendered (covers all dicta sites)
+  const loaded='#home, [class*="main-content"], [class="search"], [class*="site-wrap"], '+
+    '[class="container h-100"], [id*="body"]'
+  function visitpage(attempt){
+    if(attempt>=maxAttempts){
+      throw new Error('Page '+url+' did not load after '+maxAttempts+' attempts')
+    }
     cy.visit(url,{
       retryOnStatusCodeFailure: true,
-      timeout: 600000,
+      timeout: 120000,
       headers: {
         Connection: "Keep-Alive"
       }
     })
-    cy.wait('@webreq'+Attempts).then(()=>{
-      cy.get('body').then($body=>{
-        if($body.find('#home').length==0 && $body.find('[class*="main-content"]').length==0
-        &&$body.find('[class="search"]').length==0 && $body.find('[class*="site-wrap"]').length==0 
-        &&$body.find('[class="container h-100"]').length==0&&$body.find('[id*="body"]').length==0){
-          visitpage(Attempts+1)
-        }
-      })
+    cy.get('body').then($body=>{
+      if($body.find(loaded).length==0){
+        visitpage(attempt+1)
+      }
     })
   }
   visitpage(0)
