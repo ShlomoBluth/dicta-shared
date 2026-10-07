@@ -19,7 +19,7 @@ Cypress.Commands.add('screenSize',({size})=>{
 Cypress.Commands.add('visitpage',({url,maxAttempts=4})=>{
   // any of these means the tool's page rendered (covers all dicta sites)
   const loaded='#home, [class*="main-content"], [class="search"], [class*="site-wrap"], '+
-    '[class="container h-100"], [id*="body"]'
+    '[class="container h-100"], [id*="body"], #app header'
   function visitpage(attempt){
     if(attempt>=maxAttempts){
       throw new Error('Page '+url+' did not load after '+maxAttempts+' attempts')
